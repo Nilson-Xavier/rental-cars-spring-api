@@ -20,6 +20,7 @@ import java.util.List;
 @RequestMapping("/carros")
 @RequiredArgsConstructor
 public class CarrosRestController {
+
     private final ListarCarrosQuery listarCarrosQuery;
 
     @GetMapping
