@@ -23,7 +23,7 @@ public class CarrosRestController {
 
     private final ListarCarrosQuery listarCarrosQuery;
 
-    @GetMapping
+    @GetMapping(path = "/listar")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Retorna a lista com os carros encontrados.", content = {
                     @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ListarCarrosQueryResultItem.class))}),

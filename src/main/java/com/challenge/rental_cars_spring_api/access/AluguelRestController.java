@@ -1,6 +1,7 @@
 package com.challenge.rental_cars_spring_api.access;
 
 import com.challenge.rental_cars_spring_api.core.queries.ListarAlugueisQuery;
+import com.challenge.rental_cars_spring_api.core.queries.dtos.ListarAlugueisQueryResultItem;
 import com.challenge.rental_cars_spring_api.core.queries.dtos.ListarCarrosQueryResultItem;
 import com.challenge.rental_cars_spring_api.core.services.AluguelService;
 import com.challenge.rental_cars_spring_api.infrastructure.repositories.AluguelRepository;
@@ -33,6 +34,7 @@ public class AluguelRestController {
     private final ListarAlugueisQuery listarAlugueisQuery;
     private static final Logger logger = LoggerFactory.getLogger(AluguelRestController.class);
 
+
     @PostMapping("/processar-arquivo")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Leitura do arquivo .rtn e carga de dados na tabela ALUGUEL com sucesso.", content = {
@@ -42,7 +44,7 @@ public class AluguelRestController {
     public ResponseEntity<String> processarArquivo(@RequestParam("fileName") String fileName) {
         logger.info("Recebendo arquivo para processamento: {}", fileName);
         try {
-            Resource resource = new ClassPathResource("resources/" + fileName);
+            Resource resource = new ClassPathResource(fileName);
             File file = resource.getFile();
             if (!file.exists()) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -57,6 +59,11 @@ public class AluguelRestController {
     }
 
     @GetMapping
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Retorno da lista dos alugueis encontrados com sucesso.", content = {
+                    @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ListarAlugueisQueryResultItem.class))}),
+            @ApiResponse(responseCode = "500", description = "Erro interno no servidor", content = {
+                    @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)})})
     public ResponseEntity<Map<String, Object>> listarAlugueis() {
         logger.info("Listando todos os alugueis");
         try {

@@ -2,26 +2,26 @@ package com.challenge.rental_cars_spring_api.core.queries.dtos;
 
 import com.challenge.rental_cars_spring_api.core.domain.Aluguel;
 
-import java.math.BigDecimal;
-import java.sql.Date;
+import java.text.SimpleDateFormat;
 
-public record ListarAlugueisQueryResultItem(Date dataAluguel, String modeloCarro, Integer kmCarro,
-                                            String nomeCliente, String telefoneCliente, Date dataDevolucao,
-                                            BigDecimal valor, String pago) {
+public record ListarAlugueisQueryResultItem(String dataAluguel, String modeloCarro, Integer kmCarro,
+                                            String nomeCliente, String telefoneCliente, String dataDevolucao,
+                                            String valor, String pago) {
 
     public static ListarAlugueisQueryResultItem from(Aluguel aluguel) {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         return new ListarAlugueisQueryResultItem(
-                aluguel.getDataAluguel(),
+                sdf.format(aluguel.getDataAluguel()),
                 aluguel.getCarro().getModelo(),
                 aluguel.getCarro().getKm(),
                 aluguel.getCliente().getNome(),
                 formatarTelefone(aluguel.getCliente().getTelefone()),
-                aluguel.getDataDevolucao(),
-                aluguel.getValor(),
+                sdf.format(aluguel.getDataDevolucao()),
+                String.format("%.2f", aluguel.getValor()),
                 aluguel.isPago() ? "SIM" : "NÃO");
     }
     private static String formatarTelefone(String telefone) {
-        return "+XX(" + telefone.substring(0, 2) + ")" + telefone.substring(2, 7) + "-" + telefone.substring(7);
+        return "+55(" + telefone.substring(0, 2) + ")" + telefone.substring(2, 7) + "-" + telefone.substring(7);
     }
 }
 

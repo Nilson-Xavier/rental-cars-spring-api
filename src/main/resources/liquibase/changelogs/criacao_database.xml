@@ -18,4 +18,46 @@
         </createTable>
     </changeSet>
 
+    <changeSet id="criar-tabela-cliente" author="name">
+        <createTable tableName="cliente">
+            <column name="id" type="int8" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="pk_cliente"/>
+            </column>
+            <column name="nome" type="varchar(50)"/>
+            <column name="cpf" type="varchar(11)"/>
+            <column name="cnh" type="varchar(11)"/>
+            <column name="telefone" type="varchar(13)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="criar-tabela-aluguel" author="name">
+        <createTable tableName="aluguel">
+            <column name="id" type="int8" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="pk_aluguel"/>
+            </column>
+            <column name="carro_id" type="int8"/>
+            <column name="cliente_id" type="int8"/>
+            <column name="data_aluguel" type="date"/>
+            <column name="data_devolucao" type="date"/>
+            <column name="valor" type="decimal(7,2)"/>
+            <column name="pago" type="boolean"/>
+        </createTable>
+
+        <!-- Add foreign key constraint for cliente_id -->
+        <addForeignKeyConstraint
+                baseTableName="aluguel"
+                baseColumnNames="cliente_id"
+                constraintName="fk_aluguel_cliente"
+                referencedTableName="cliente"
+                referencedColumnNames="id"/>
+
+        <!-- Add foreign key constraint for carro_id -->
+        <addForeignKeyConstraint
+                baseTableName="aluguel"
+                baseColumnNames="carro_id"
+                constraintName="fk_aluguel_carro"
+                referencedTableName="carro"
+                referencedColumnNames="id"/>
+    </changeSet>
+
 </databaseChangeLog>

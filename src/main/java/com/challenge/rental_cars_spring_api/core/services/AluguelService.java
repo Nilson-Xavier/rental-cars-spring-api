@@ -9,6 +9,7 @@ import com.challenge.rental_cars_spring_api.infrastructure.repositories.CarroRep
 import com.challenge.rental_cars_spring_api.infrastructure.repositories.ClienteRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
@@ -28,8 +29,11 @@ import java.util.stream.Collectors;
 @Service
 public class AluguelService {
 
+    @Autowired
     private AluguelRepository aluguelRepository;
+    @Autowired
     private CarroRepository carroRepository;
+    @Autowired
     private ClienteRepository clienteRepository;
     private static final Logger logger = LoggerFactory.getLogger(AluguelService.class);
 
