@@ -56,7 +56,7 @@ public class CarrosRestControllerTest {
     }
 
     @Test
-    @DisplayName("Listar Carros")
+    @DisplayName("Listar Carros deve retornar os carros esperados")
     void testListarCarrosReturnsExpectedCars() throws Exception {
         mockMvc.perform(get("/carros/listar")
                         .contentType(MediaType.APPLICATION_JSON))

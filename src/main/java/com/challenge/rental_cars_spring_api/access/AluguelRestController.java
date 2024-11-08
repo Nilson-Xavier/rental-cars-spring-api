@@ -39,6 +39,8 @@ public class AluguelRestController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Leitura do arquivo .rtn e carga de dados na tabela ALUGUEL com sucesso.", content = {
                     @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ListarCarrosQueryResultItem.class))}),
+            @ApiResponse(responseCode = "404", description = "Arquivo não encontrado", content = {
+                    @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)}),
             @ApiResponse(responseCode = "500", description = "Erro interno no servidor", content = {
                     @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)})})
     public ResponseEntity<String> processarArquivo(@RequestParam("fileName") String fileName) {
