@@ -4,6 +4,7 @@ import com.challenge.rental_cars_spring_api.core.domain.Carro;
 import com.challenge.rental_cars_spring_api.infrastructure.repositories.CarroRepository;
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -19,6 +20,7 @@ public class CarroRepositoryTest {
     private CarroRepository carroRepository;
 
     @Test
+    @DisplayName("Save And Find Carro deve salvar e buscar um carro")
     public void testSaveAndFindCarro() {
         Carro carro = new Carro(null, "Model S", "2022", 5, 0, "Tesla", BigDecimal.valueOf(100));
 

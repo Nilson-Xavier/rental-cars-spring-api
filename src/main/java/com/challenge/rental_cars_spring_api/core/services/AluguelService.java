@@ -3,6 +3,7 @@ package com.challenge.rental_cars_spring_api.core.services;
 import com.challenge.rental_cars_spring_api.core.domain.Aluguel;
 import com.challenge.rental_cars_spring_api.core.domain.Carro;
 import com.challenge.rental_cars_spring_api.core.domain.Cliente;
+import com.challenge.rental_cars_spring_api.core.queries.ListarAlugueisQuery;
 import com.challenge.rental_cars_spring_api.core.queries.dtos.ListarAlugueisQueryResultItem;
 import com.challenge.rental_cars_spring_api.infrastructure.repositories.AluguelRepository;
 import com.challenge.rental_cars_spring_api.infrastructure.repositories.CarroRepository;
@@ -24,7 +25,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class AluguelService {
@@ -77,15 +77,14 @@ public class AluguelService {
     }
 
     public List<ListarAlugueisQueryResultItem> listarAlugueis() {
-        return aluguelRepository.findAll().stream()
-                .map(ListarAlugueisQueryResultItem::from)
-                .collect(Collectors.toList());
+        return new ListarAlugueisQuery(aluguelRepository).execute();
     }
 
     public BigDecimal calcularTotalNaoPago() {
-        return aluguelRepository.findAll().stream()
-                .filter(aluguel -> !aluguel.isPago())
-                .map(Aluguel::getValor)
+        return new ListarAlugueisQuery(aluguelRepository).execute().stream()
+                .filter(aluguel -> "NÃO".equals(aluguel.pago()))
+                .map(aluguel -> new BigDecimal(aluguel.valor().replace(",", ".")))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
+
     }
 }

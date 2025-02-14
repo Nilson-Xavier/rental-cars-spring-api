@@ -26,7 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
-@WebMvcTest(CarrosRestController.class)
+@WebMvcTest(controllers = CarrosRestController.class)
 public class CarrosRestControllerTest {
 
     @Autowired

@@ -15,7 +15,6 @@ public class ListarAlugueisQuery {
     private final AluguelRepository aluguelRepository;
 
     public List<ListarAlugueisQueryResultItem> execute() {
-
         return aluguelRepository.findAll().stream().map(ListarAlugueisQueryResultItem::from)
                 .collect(Collectors.toList());
     }

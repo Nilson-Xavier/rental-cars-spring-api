@@ -13,14 +13,13 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.File;
-import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,7 +33,6 @@ public class AluguelRestController {
     private final ListarAlugueisQuery listarAlugueisQuery;
     private static final Logger logger = LoggerFactory.getLogger(AluguelRestController.class);
 
-
     @PostMapping("/processar-arquivo")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Leitura do arquivo .rtn e carga de dados na tabela ALUGUEL com sucesso.", content = {
@@ -46,15 +44,16 @@ public class AluguelRestController {
     public ResponseEntity<String> processarArquivo(@RequestParam("fileName") String fileName) {
         logger.info("Recebendo arquivo para processamento: {}", fileName);
         try {
-            Resource resource = new ClassPathResource(fileName);
-            File file = resource.getFile();
-            if (!file.exists()) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+            var path = Paths.get(new ClassPathResource("./").getURI()).getParent().
+                    resolve("classes/" + fileName);
+            if (!Files.exists(path)) {
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND)
                         .body("Arquivo não encontrado: " + fileName);
             }
-            aluguelService.processarArquivo(file.getAbsolutePath());
+            this.aluguelService.processarArquivo(path.toString());
             return ResponseEntity.ok("Arquivo processado com sucesso.");
-        } catch (IOException e) {
+        } catch (Exception e) {
+            logger.error("Erro ao processar o arquivo: ", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Erro ao processar o arquivo.");
         }
@@ -72,10 +71,9 @@ public class AluguelRestController {
             Map<String, Object> response = new HashMap<>();
             response.put("alugueis", aluguelService.listarAlugueis());
             response.put("totalNaoPago", aluguelService.calcularTotalNaoPago());
-
             return ResponseEntity.ok(response);
         } catch (Exception e) {
-            logger.error("Erro ao listar alugueis", e);
+            logger.error("Erro ao listar alugueis :", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(Map.of("erro", "Erro ao listar alugueis"));
         }

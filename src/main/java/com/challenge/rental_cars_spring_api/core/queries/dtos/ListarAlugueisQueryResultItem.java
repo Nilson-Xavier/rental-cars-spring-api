@@ -21,7 +21,8 @@ public record ListarAlugueisQueryResultItem(String dataAluguel, String modeloCar
                 aluguel.isPago() ? "SIM" : "NÃO");
     }
     private static String formatarTelefone(String telefone) {
-        return "+55(" + telefone.substring(0, 2) + ")" + telefone.substring(2, 7) + "-" + telefone.substring(7);
+        return telefone == null ? "" : "+55(" + telefone.substring(0, 2) + ")" + telefone.substring(2, 7) +
+                "-" + telefone.substring(7);
     }
 }
 

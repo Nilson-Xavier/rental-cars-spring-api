@@ -21,8 +21,6 @@ import java.util.Collections;
 
 @Configuration
 @EnableWebSecurity
-//@EnableMethodSecurity
-//@EnableAutoConfiguration
 public class SecurityConfig {
 
     @Value("${cors.allowed-origins-front}")

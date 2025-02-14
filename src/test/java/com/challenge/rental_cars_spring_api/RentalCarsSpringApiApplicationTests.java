@@ -8,6 +8,7 @@ class RentalCarsSpringApiApplicationTests {
 
 	@Test
 	void contextLoads() {
+
 	}
 
 }

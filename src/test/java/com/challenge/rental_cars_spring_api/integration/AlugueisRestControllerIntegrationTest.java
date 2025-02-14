@@ -13,14 +13,13 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
-public class CarrosRestControllerIntegrationTest {
+public class AlugueisRestControllerIntegrationTest {
 
     @Autowired
     private WebApplicationContext webApplicationContext;
@@ -28,15 +27,28 @@ public class CarrosRestControllerIntegrationTest {
     private MockMvc mockMvc;
 
     @Test
-    @DisplayName("Listar Carros deve listar os carros")
-    public void testListarCarros() throws Exception {
+    @DisplayName("Listar Alugueis deve listar os alugueis")
+    public void testListarAlugueis() throws Exception {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
 
-        mockMvc.perform(get("/carros/listar")
+        mockMvc.perform(get("/alugueis")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$").isArray())
-                .andExpect(jsonPath("$").isNotEmpty());
+                .andExpect(jsonPath("$.alugueis").isArray())
+                .andExpect(jsonPath("$.alugueis").isNotEmpty());
+    }
+
+    @Test
+    @DisplayName("Processar Arquivo deve processar o arquivo")
+    public void testProcessarArquivo() throws Exception {
+        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+
+        mockMvc.perform(post("/alugueis/processar-arquivo")
+                        .param("fileName", "RentReport.rtn")
+                        .contentType(MediaType.TEXT_PLAIN))
+                .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_PLAIN))
+                .andExpect(status().isOk())
+                .andExpect(content().string("Arquivo processado com sucesso."));
     }
 }
