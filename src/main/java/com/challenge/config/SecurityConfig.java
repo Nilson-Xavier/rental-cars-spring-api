@@ -12,6 +12,8 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -48,12 +50,16 @@ public class SecurityConfig {
     }
 
     @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
     public UserDetailsService users() {
         UserDetails user = User
-                .withDefaultPasswordEncoder()
-//                .withUsername("admin")
-                .username("admin")
-                .password("admin")
+//                .withDefaultPasswordEncoder()
+                .withUsername("admin")
+                .password(passwordEncoder().encode("admin"))
                 .roles("ADMIN")
                 .build();
         return new InMemoryUserDetailsManager(Collections.singleton(user));
